@@ -1,0 +1,76 @@
+EXP:
+  MODEL_NAME: ptrt_v1.9
+  SEED: 1024
+  IS_MANUAL_GPU: True #False
+  GPUS: 1,2,3
+  DEVICE: 0
+
+DATA_SOURCE:
+  IMG_DIR: /data3/data_haomo/m1/bev/0131/pretrain_seq2seq
+  TXT_PATH: /data3/data_haomo/m1/csv/0131/pretrain_seq2seq_01.csv
+  PRETRAINED_EFFINET_MODEL_PATH: /data/wangyue/model_one/pretrained_model/efficientnet-b4-6ed6700e.pth
+  IMG_FEATURE_PATH: /data3/data_haomo/m1/bev/1212/img_features
+
+
+DATA:
+  FRAME:
+    SRC_FRAME_LEN: 80
+    TGT_FRAME_LEN: 50
+    FRAME_STEP: 1
+    IMG_FEATURES_LEN: 1792
+  IS_ONLY_WAYPOINT: True #False
+  IS_NAV: True # 是否使用导航信息
+  IS_GOAL: True # 是否加入终点
+  NAV_GOAL_LEN: 2
+  NUM_OBS: 3
+  NUM_LANES: 6
+  IS_IMG: False
+
+MODEL:
+  PRETRAIN:
+    N_LAYERS: 8   #8
+    N_HEADS: 12   #12
+    D_MODEL: 768  #768
+    D_FF: 3072 #768*4
+    NUM_WORKS: 0
+    HIDDEN_DROPOUT_PROB: 0.1
+    IN_FEATURES_SIZE: 59
+    OUT_FEATURES_SIZE: 2 #5
+    EMB_SIZE: 1024
+
+TRAIN:
+  EPOCHS: 100
+  BATCH_SIZE: 128 #256
+  TRAIN_RATE: 0.99 #0.92
+  OPTIMIZER:
+    NAME: Adam
+    WEIGHT_DECAY: 0.1
+    LR: 0.00001 #0.0001
+    WARMUP_PROPORTION: 0.1
+    STEP_SIZE: 3
+    GAMMA: 0.96
+  
+  RECOVER:
+    IS_RECOVER: False
+    IS_AUTO_RECOVER: True # False
+    RECOVER_STEP: 1 # 当IS_AUTO_RECOVER=False,要指定这个参数
+    
+  LOSS:
+    NAME: cross_entropy
+
+EVAL:
+  IS_EVAL: True
+  IS_VISZ: False
+  EVAL_EPOCH: 2
+  BATCH_SIZE: 128
+  HIST_FRAME_LEN: 80
+  PRED_FRAME_LEN: 50
+  FRAME_STEP: 1
+  NUM_WORKS: 1
+  MODEL_DIR: /mnt/ve_share/share/model_one/pretrain/ptrt_v1.0/model_state_dict_epoch_156.bin
+
+DIR:
+  ROOT: /data/wangyue/model_one/experiment
+  LOG : /data/wangyue/model_one/experiment/
+  VISUAL: /data/wangyue/model_one/experiment/
+  MODEL_DIR: /data3/data_haomo/m1/pretrain/
